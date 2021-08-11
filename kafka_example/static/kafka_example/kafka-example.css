@@ -16,3 +16,12 @@ body {
     max-width: 40em;
 }
 
+.popup-help .pin-button {
+    display: none;
+    position: absolute;
+    right: 1rem;
+}
+.popup-help:hover .pin-button, .popup-help.popup-open .pin-button {
+    display: initial;
+}
+

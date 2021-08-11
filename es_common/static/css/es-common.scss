@@ -26,6 +26,7 @@ body {
 }
 .popup-open .popup {
     z-index: 10;
+    pointer-events: initial;
 }
 
 .list-compact {

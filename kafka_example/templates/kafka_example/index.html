@@ -7,6 +7,23 @@
   <link rel="stylesheet" href="{% static 'kafka_example/kafka-example.css' %}">
 {% endblock css %}
 
+{% block js %}
+  {{ block.super }}
+  <script>
+$(function() {
+  $(".pin-button button").click(function() {
+    var pinned = ! $(this).parents(".popup-help").hasClass('popup-open');
+    $(".popup-help.popup-open .pin-button button").text('pin');
+    $(".popup-help.popup-open").removeClass('popup-open');
+    if (pinned) {
+      $(this).parents(".popup-help").addClass('popup-open');
+      $(this).text('unpin');
+    }
+  });
+});
+  </script>
+{% endblock js %}
+
 {% block content %}
 
   {% if messages %}
@@ -49,6 +66,9 @@
       <div class="card-header">
         <span class="value">{{ item.value }}</span>
         <span class="timestamp">{{ item.timestamp }} <small>{{ item.timestamp|as_timesince }} ago</small></span>
+        <span class="pin-button">
+          <button type="button" class="btn btn-light btn-outline-secondary btn-lineheight">pin</button>
+        </span>
       </div>
       <div class="popup card">
         <ul class="list-compact">
