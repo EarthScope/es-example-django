@@ -1,5 +1,6 @@
 {% extends 'es_common/base.html' %}
 {% load static %}
+{% load es_common_tags %}
 
 {% block css %}
   {{ block.super }}
@@ -47,14 +48,14 @@
     <div class="card latest popup-help">
       <div class="card-header">
         <span class="value">{{ item.value }}</span>
-        <span class="timestamp">{{ item.timestamp }}</span>
+        <span class="timestamp">{{ item.timestamp }} <small>{{ item.timestamp|as_timesince }} ago</small></span>
       </div>
       <div class="popup card">
         <ul class="list-compact">
           <li><b>Data Id</b> {{ item.data_id }}</li>
           <li><b>Started</b> {{ item.timestamp }}</li>
           <li><b>Received</b> {{ item.created_date }}</li>
-          <li><b>Delay</b> {{ item.delay_ms }}ms</li>
+          <li><b>Delay</b> {{ item.delay_ms|stringformat:"d" }}ms</li>
           <li><b>Value</b> {{ item.value }}</li>
           <li><b>Provenance</b>
             <ul class="provenance">
