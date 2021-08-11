@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from kafka_example.kafka.producer import produce_example_message
 from kafka_example.models import ExampleValue
 from django.contrib.auth import logout
+from es_common.data_id import create_data_id
 import gzip
 import base64
 import jwt
@@ -67,11 +68,21 @@ class IndexView(FormView):
         # but the response itself is always the form looking ok
         return super().form_valid(form)
 
+    def get_page_id(self):
+        """
+        """
+        return create_data_id('web', paths=[self.request.path.strip('/')], add_datetime=True)
+
     def get_context_data(self, **kwargs):
         """
         Add data to the template context
         """
         context = super().get_context_data(**kwargs)
         # Include the last few processed items
-        context['recent'] = ExampleValue.objects.order_by('-created_date')[:20]
+        recent = ExampleValue.objects.order_by('-created_date')[:20]
+        # Add this page to their provenance
+        page_id = self.get_page_id()
+        for r in recent:
+            r.data_provenance.append(page_id)
+        context['recent'] = recent
         return context

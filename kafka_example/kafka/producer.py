@@ -36,7 +36,7 @@ def produce_example_message(value):
     producer = ProducerSingleton.singleton(topic)
 
     # Create an id for this processing step
-    process_id = create_data_id("produce.example", paths=(topic, __name__))
+    process_id = create_data_id("produce.example", paths=(topic, __name__), add_date=True)
 
     # We use a model instance to create the message for convenience
     # but it does *NOT* get saved here -- we only save the one we

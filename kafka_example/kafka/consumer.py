@@ -35,7 +35,7 @@ class ExampleConsumer(object):
         """
         Get a data id for one step
         """
-        return create_data_id("archive.example", paths=(self.topic, __name__,))
+        return create_data_id("archive.example", paths=(self.topic, __name__,), add_date=True)
 
     def consume(self, message):
         """
