@@ -1,20 +1,39 @@
 {% extends 'es_common/base.html' %}
 {% load static %}
+{% load es_common_tags %}
 
 {% block css %}
   {{ block.super }}
   <link rel="stylesheet" href="{% static 'kafka_example/kafka-example.css' %}">
 {% endblock css %}
 
+{% block js %}
+  {{ block.super }}
+  <script>
+$(function() {
+  $(".pin-button button").click(function() {
+    var pinned = ! $(this).parents(".popup-help").hasClass('popup-open');
+    $(".popup-help.popup-open .pin-button button").text('pin');
+    $(".popup-help.popup-open").removeClass('popup-open');
+    if (pinned) {
+      $(this).parents(".popup-help").addClass('popup-open');
+      $(this).text('unpin');
+    }
+  });
+});
+  </script>
+{% endblock js %}
+
 {% block content %}
 
   {% if messages %}
-    <div class="messages">
+    <div class="messages alert alert-dismissible" role="alert">
         {% for message in messages %}
         <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>
             {{ message }}
         </div>
         {% endfor %}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   {% endif %}
 
@@ -46,14 +65,17 @@
     <div class="card latest popup-help">
       <div class="card-header">
         <span class="value">{{ item.value }}</span>
-        <span class="timestamp">{{ item.timestamp }}</span>
+        <span class="timestamp">{{ item.timestamp }} <small>{{ item.timestamp|as_timesince }} ago</small></span>
+        <span class="pin-button">
+          <button type="button" class="btn btn-light btn-outline-secondary btn-lineheight">pin</button>
+        </span>
       </div>
       <div class="popup card">
         <ul class="list-compact">
           <li><b>Data Id</b> {{ item.data_id }}</li>
           <li><b>Started</b> {{ item.timestamp }}</li>
           <li><b>Received</b> {{ item.created_date }}</li>
-          <li><b>Delay</b> {{ item.delay_ms }}ms</li>
+          <li><b>Delay</b> {{ item.delay_ms|stringformat:"d" }}ms</li>
           <li><b>Value</b> {{ item.value }}</li>
           <li><b>Provenance</b>
             <ul class="provenance">

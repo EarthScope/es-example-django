@@ -1,13 +1,16 @@
-from django import template
-from django.template.defaultfilters import stringfilter
-from django.utils.safestring import mark_safe
+import datetime
 import re
 from logging import getLogger
-from django.utils.encoding import force_text
+
+from django import template
 from django.conf import settings
+from django.template.defaultfilters import stringfilter
 from django.template.loader import render_to_string
+from django.utils.encoding import force_text
 from django.utils.http import urlencode
-from es_common.utils import safe_json, make_full_url
+from django.utils.safestring import mark_safe
+from es_common.utils import make_full_url, safe_json
+from numbers import Number
 
 LOGGER = getLogger(__name__)
 register = template.Library()
@@ -89,3 +92,43 @@ def full_url(path):
         return path
     else:
         return make_full_url(path)
+
+
+@register.filter
+def as_timedelta(value):
+    if isinstance(value, Number):
+        value = datetime.timedelta(milliseconds=value)
+    if not isinstance(value, datetime.timedelta):
+        LOGGER.error("Don't know as_timedelta for %s", value)
+        raise Exception("Don't know es_timedelta for %s" % value)
+    if value.total_seconds() < 1:
+        # Format as ms
+        return "%.3gms" % value.total_seconds() * 1000
+    elif value.total_seconds() < 10:
+        return "%.2fs" % value.total_seconds()
+    else:
+        units = {
+            'd': datetime.timedelta(days=1),
+            'h': datetime.timedelta(hours=1),
+            'm': datetime.timedelta(minutes=1),
+            's': datetime.timedelta(seconds=1),
+        }
+        parts = []
+        for unit, resolution in units.items():
+            if len(parts) or value > resolution:
+                num_units = int(value / resolution)
+                value -= (num_units * resolution)
+                parts.append(
+                    "%d%s" % (num_units, unit)
+                )
+                if len(parts) > 1:
+                    break
+        return ':'.join(parts)
+    
+
+@register.filter
+def as_timesince(value):
+    if not isinstance(value, datetime.datetime):
+        raise Exception("Don't know as_timesince for %s" % value)
+    return as_timedelta(datetime.datetime.now() - value)
+   
