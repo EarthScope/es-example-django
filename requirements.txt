@@ -1,5 +1,6 @@
 avro
 channels
+channels_redis
 confluent-kafka[avro]
 Django>=3,<4
 django-appconf

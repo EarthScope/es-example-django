@@ -6,6 +6,8 @@ from appconf import AppConf
 from django.dispatch import receiver
 from django.conf import settings
 from django.db.models.signals import post_save
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 from logging import getLogger
 
 LOGGER = getLogger(__name__)
@@ -77,6 +79,19 @@ class ExampleValue(models.Model):
 
 @receiver(post_save, sender=ExampleValue)
 def add_archive_provenance(instance=None, created=False, **kwargs):
+    """
+    When creating a new item, add the db location to the provenance
+    """
     if instance and created:
         if instance.add_provenance(instance.get_archive_id()):
             instance.save()
+
+
+@receiver(post_save, sender=ExampleValue)
+def notify_channels(instance=None, **kwargs):
+    """
+    Send a notification when an item is archived (for websockets)
+    """
+    if instance:
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)("archived", {"pk": instance.pk})

@@ -1,4 +1,4 @@
-from channels.generic.websocket import JsonWebsocketConsumer
+from channels.generic.websocket import JsonWebsocketConsumer, SyncConsumer
 from kafka_example.models import ExampleValue
 from logging import getLogger
 from kafka_example.kafka.producer import produce_example_message
@@ -20,6 +20,7 @@ class ExampleConsumer(JsonWebsocketConsumer):
     A websocket consumer for operations on the example topic
     """
     def connect(self):
+        LOGGER.info("Connected: %s", self.channel_name)
         self.accept()
 
     def disconnect(self, close_code):
@@ -65,3 +66,13 @@ class ExampleConsumer(JsonWebsocketConsumer):
         if since:
             qs = qs.filter(created_date__gte=since)
         return clean_json(list(qs.values()[:20]))
+
+
+class ExampleArchivedConsumer(SyncConsumer):
+    """
+    Listens for Channel notifications that an item has been saved
+    """
+    def example_archived(self, ctx):
+        obj = ExampleValue.objects.get(pk=ctx.get('pk'))
+        LOGGER.info("example_archived: %s", obj)
+

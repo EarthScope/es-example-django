@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'channels',
     'compressor',
     'es_user',
     'es_common',
@@ -225,10 +226,19 @@ except Exception as e:
 KAFKA_EXAMPLE_TOPIC = "test_provenance"
 
 # CSS compilers
-
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
 
 # Open CORS headers
 CORS_ALLOW_ALL_ORIGINS = True
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}

@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/3.2/howto/deployment/asgi/
 import os
 from channels.http import AsgiHandler
 from channels.auth import AuthMiddlewareStack
-from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.routing import ProtocolTypeRouter, URLRouter, ChannelNameRouter
 from django.core.asgi import get_asgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'www.settings')
@@ -26,6 +26,9 @@ def create_app():
             URLRouter(
                 kafka_example.channels.routing.websocket_urlpatterns
             )
+        ),
+        "channel": ChannelNameRouter(
+            kafka_example.channels.routing.channelname_patterns
         ),
     })
 
