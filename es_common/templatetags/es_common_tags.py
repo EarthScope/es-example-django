@@ -103,7 +103,7 @@ def as_timedelta(value):
         raise Exception("Don't know es_timedelta for %s" % value)
     if value.total_seconds() < 1:
         # Format as ms
-        return "%.3gms" % value.total_seconds() * 1000
+        return "%.3gms" % (value.total_seconds() * 1000)
     elif value.total_seconds() < 10:
         return "%.2fs" % value.total_seconds()
     else:
