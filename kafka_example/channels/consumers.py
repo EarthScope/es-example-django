@@ -3,6 +3,7 @@ from kafka_example.models import ExampleValue
 from logging import getLogger
 from kafka_example.kafka.producer import produce_example_message
 from es_common.utils import parse_iso8601, safe_json, parse_json
+from asgiref.sync import async_to_sync
 
 LOGGER = getLogger(__name__)
 
@@ -22,9 +23,10 @@ class ExampleConsumer(JsonWebsocketConsumer):
     def connect(self):
         LOGGER.info("Connected: %s", self.channel_name)
         self.accept()
+        async_to_sync(self.channel_layer.group_add)("archived", self.channel_name)
 
     def disconnect(self, close_code):
-        pass
+        async_to_sync(self.channel_layer.group_discard)("archived", self.channel_name)
 
     def receive_json(self, request):
         """
