@@ -14,7 +14,15 @@ COAPI_KEY = "nxvh-awri-mmsf-7z6m"
 # your CO ID (number) should go here
 COID = "28"
 # a special COI for 'active users'
-CO_ACTIVE_USERS_COU="1306"
+CO_ACTIVE_USERS_COU = "1306"
+
+
+def comanage_lookup_sub(sub: str) -> Tuple[int, str or None]:
+    """
+    Look up a user sub (ie. cilogon identifier) in COmanage
+    """
+    pass
+
 
 def comanage_get_person_name(co_person_id) -> Tuple[int, str or None]:
     """
