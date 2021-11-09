@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'compressor',
     'es_user',
     'es_common',
-    'kafka_example',
+    # 'kafka_example',
 ]
 
 MIDDLEWARE = [

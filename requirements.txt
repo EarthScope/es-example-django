@@ -1,7 +1,8 @@
-avro
+# avro
+auth0-python
 channels
 channels_redis
-confluent-kafka[avro]
+# confluent-kafka[avro]
 Django>=3,<4
 django-appconf
 django-compressor
@@ -9,6 +10,8 @@ django-crispy-forms
 django-libsass
 django-prometheus
 django-vouch-proxy-auth
+# fastavro
+pyyaml
 gevent
 gunicorn
 psycopg2-binary

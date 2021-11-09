@@ -15,9 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('example/', include('kafka_example.urls')),
     path('user/', include('es_user.urls')),
 ]
+
+if 'kafka_example' in settings.INSTALLED_APPS:
+    urlpatterns += [path('example/', include('kafka_example.urls'))]
+
