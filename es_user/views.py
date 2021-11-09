@@ -9,6 +9,7 @@ from django.views.generic.base import RedirectView
 
 from es_user.vouch_proxy import VouchProxyJWT
 from es_user.models import UserJWT
+from es_user import auth0_lib
 from es_common.utils import safe_json
 
 LOGGER = getLogger(__name__)
@@ -38,6 +39,14 @@ class UserView(TemplateView):
             LOGGER.info(context['user_claims'])
         except Exception as e:
             LOGGER.warning(e)
+        
+        try:
+            api = auth0_lib.Auth0ManagementAPI()
+            context['auth0_connections'] = api.get_connections()
+        except Exception as e:
+            LOGGER.warning(e)
+            context['auth0_connections'] = e
+
         return context
 
 

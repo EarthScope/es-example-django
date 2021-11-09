@@ -9,6 +9,7 @@ import re
 from logging import getLogger
 from django.forms.models import model_to_dict
 import json
+import yaml
 from django.core.serializers.json import DjangoJSONEncoder
 from django.conf import settings
 from functools import wraps
@@ -166,6 +167,13 @@ def safe_json(obj, **kwargs):
 def parse_json(s, **kwargs):
     """ Wrapper to read JSON, stubbed for now """
     return json.loads(s, **kwargs)
+
+
+def safe_yaml(obj):
+    """
+    Return a safe YAML string
+    """
+    return yaml.dump(obj)
 
 
 def get_instance_data(instance):

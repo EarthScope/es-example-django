@@ -242,3 +242,8 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+# This is the machine-to-machine client for management API, not the OIDC client for user login!
+AUTH0_MGMT_CLIENT_ID = os.getenv("AUTH0_MGMT_CLIENT_ID")
+AUTH0_MGMT_CLIENT_SECRET = os.getenv("AUTH0_MGMT_CLIENT_SECRET")
+AUTH0_MGMT_TENANT_HOST = os.getenv("AUTH0_MGMT_TENANT_HOST", "https://dev-xxxxx.us.auth0.com/")

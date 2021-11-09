@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_text
 from django.utils.http import urlencode
 from django.utils.safestring import mark_safe
-from es_common.utils import make_full_url, safe_json
+from es_common.utils import make_full_url, safe_json, safe_yaml
 from numbers import Number
 
 LOGGER = getLogger(__name__)
@@ -64,6 +64,14 @@ def as_json(value):
     Output the value as JSON
     """
     return safe_json(value, indent=1)
+
+
+@register.filter
+def as_yaml(value):
+    """
+    Output the value as YAML
+    """
+    return safe_yaml(value)
 
 
 @register.filter

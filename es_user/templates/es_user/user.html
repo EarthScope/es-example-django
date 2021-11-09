@@ -12,29 +12,100 @@ pre {
 
 {% block content %}
 
-  <h3>User</h3>
-
-    {% if user.pk %}
-      {{ user }} (#{{ user.pk }})
-      {% if user_claims %}
-        <pre>{{ user_claims|as_json }}</pre>
-      {% else %}
-        (no claims)
-      {% endif %}
-    {% endif %}
-
-    <h3>User JWT</h3>
-
-    {% if user_jwt %}
-      <pre>{{ user_jwt|as_json }}</pre>
-    {% endif %}
-
-  <h3>Cookie JWT</h3>
-
+<div class="row row-cols-1 row-cols-md-2 g-4">
+  <div class="col">
+<div class="card">
+  <h5 class="card-header">
+    Browser Cookie (from vouch-proxy)
+  </h5>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <b>Status</b>
+      <span>
+        {% if cookie_jwt.is_valid %}Ok{% else %}Invalid{% endif %}
+      </span>
+    </li>
     {% if cookie_jwt.raw_value %}
-      {% if cookie_jwt.is_valid %}Ok{% else %}Invalid{% endif %}
-      <pre>{{ cookie_jwt.raw_value }}</pre>
-      <pre>{{ cookie_jwt.value|as_json }}</pre>
+    <li class="list-group-item">
+      <b>Raw Cookie</b>
+      <span>{{ cookie_jwt.raw_value }}</span>
+    </li>
+    <li class="list-group-item">
+      <b>JSON Value</b>
+      <pre>{{ cookie_jwt.value|as_yaml }}</pre>
+    </li>
     {% endif %}
+  </ul>
+</div>
+  </div>
+  <div class="col">
+<div class="card">
+  <h5 class="card-header">
+    HTTP Headers
+  </h5>
+  <div class="card-body">
+    <pre>{{ request.META|as_yaml }}</pre>
+  </div>
+</div>
+  </div>
+  <div class="col">
+<div class="card">
+  <h5 class="card-header">
+    Stored User (in the server-side application)
+  </h5>
+  <div class="card-body">
+    {% if user %}
+      {{ user }} (#{{ user.pk }})
+    {% else %}
+      None
+    {% endif %}
+  </div>
+</div>
+</div>
+
+{% if user %}
+
+<div class="col">
+<div class="card">
+  <h5 class="card-header">
+    User's Aggregated JWT (possibly across multiple sessions)
+  </h5>
+  <div class="card-body">
+    {% if user_jwt %}
+      <pre>{{ user_jwt|as_yaml }}</pre>
+    {% else %}
+      (no jwt)
+    {% endif %}
+  </div>
+</div>
+</div>
+
+<div class="col">
+<div class="card">
+  <h5 class="card-header">
+    All the claims associated with the user record.
+  </h5>
+  <div class="card-body">
+    {% if user_claims %}
+      <pre>{{ user_claims|as_yaml }}</pre>
+    {% else %}
+      (no claims)
+    {% endif %}
+  </div>
+</div>
+</div>
+
+{% endif %}
+
+<div class="col">
+<div class="card">
+  <h5 class="card-header">
+    Auth0 API
+  </h5>
+  <div class="card-body">
+    {{ connections }}
+  </div>
+</div>
+</div>
 
 {% endblock content %}

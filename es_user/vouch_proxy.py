@@ -83,9 +83,9 @@ class VouchProxyJWT(object):
         )
         validate.raise_for_status()
 
-    def get_co_person(self):
+    def get_user_id(self):
         """
-        Get the COmanage person associated with the login
+        Get the user identifier associated with the login
         """
         pass
 
