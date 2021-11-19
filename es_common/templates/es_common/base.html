@@ -17,28 +17,26 @@
   <body>
 
     {% block nav %}
-    <nav class="navbar navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand">es-example-django</a>
-        <form class="d-flex">
-          {% if user.is_authenticated %}
-            <b class="me-2"><a href="{% url 'user-home' %}">{{ user }}</a></b>
-            <a href="{% url 'user-logout' %}">Logout</a>
-          {% else %}
-            <div class="popup-help">
-              <a href="{% url 'user-login' %}">Login</a>
-              <div class="popup card">
-                Login through vouch-proxy
-              </div>
+    <nav class="navbar navbar-light bg-light border border-medium px-3">
+      <a class="navbar-brand">es-example-django</a>
+      <form class="d-flex">
+        {% if user.is_authenticated %}
+          <b class="me-2"><a href="{% url 'user-home' %}">{{ user }}</a></b>
+          <a href="{% url 'user-logout' %}">Logout</a>
+        {% else %}
+          <div class="popup-help">
+            <a href="{% url 'user-login' %}">Login</a>
+            <div class="popup card">
+              Login through vouch-proxy
             </div>
-          {% endif %}
-        </form>
-      </div>
+          </div>
+        {% endif %}
+      </form>
     </nav>    
     {% endblock nav %}
 
     {% block body %}
-    <div class="px-2 py-1">
+    <div class="py-3">
         {% block content %}
 
         {% endblock content %}
